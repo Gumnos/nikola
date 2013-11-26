@@ -49,37 +49,39 @@
 </%def>
 
 <%def name="html_social()">
+    %if social_buttons_code:
+    <div class="social-buttons">
     ${social_buttons_code}
-</%def>
-
-<!--FIXME: remove in v7 -->
-<%def name="html_sidebar_links()">
-    ${html_navigation_links()}
+    </div>
+    %endif
 </%def>
 
 <%def name="html_navigation_links()">
-    %for url, text in navigation_links[lang]:
-        % if isinstance(url, tuple):
-            <li> ${text}
-            <ul>
-            %for suburl, text in url:
-                % if rel_link(permalink, suburl) == "#":
+    %if navigation_links[lang]:
+    <ul>
+        %for url, text in navigation_links[lang]:
+            % if isinstance(url, tuple):
+                <li> ${text}
+                <ul>
+                %for suburl, text in url:
+                    % if rel_link(permalink, suburl) == "#":
+                        <li class="active"><a href="${permalink}">${text}</a>
+                    %else:
+                        <li><a href="${suburl}">${text}</a>
+                    %endif
+                %endfor
+                </ul>
+            % else:
+                % if rel_link(permalink, url) == "#":
                     <li class="active"><a href="${permalink}">${text}</a>
                 %else:
-                    <li><a href="${suburl}">${text}</a>
+                    <li><a href="${url}">${text}</a>
                 %endif
-            %endfor
-            </ul>
-        % else:
-            % if rel_link(permalink, url) == "#":
-                <li class="active"><a href="${permalink}">${text}</a>
-            %else:
-                <li><a href="${url}">${text}</a>
-            %endif
-        % endif
-    %endfor
+            % endif
+        %endfor
+    </ul>
+    %endif
 </%def>
-
 
 <%def name="html_translations()">
     %for langname in translations.keys():
